@@ -1,6 +1,6 @@
 OPTIONS (SKIP=0,ERRORS = 10)
 load data
-infile '/tmp/allCountries.txt'
+infile '/u01/download/allCountries.txt'
 APPEND into table locations 
 TRAILING NULLCOLS
 (
