@@ -13,11 +13,25 @@ returns: {"location":"chicago","latitude": 41.881944, "longitude":-87.627778}
 Instructions
 ------------
 
-1. Launch a copy of public ami ami-ae37c8c7 on EC2. This is a 64 bit version of Oracle XE that comes preinstalled with APEX. You can use a micro instance. 
-Reference: http://www.pythian.com/blog/oracle-database-11g-xe-beta-amazon-ec2-image/
+1. Boot up a micro or small instance on EC2, and configure it for OracleXE. There are two bash shell scripts that automate this:
 
-2. Once you have the DB and app server up, create an oracle user on the db, and create the db schema using ./src/sql/CreateSchema.sql 
+https://github.com/jolson7168/ec2-scripts/bootScripts/oracleXEInit.sh
+https://github.com/jolson7168/ec2-scripts/initScripts/oracleXEBoot.sh 
 
-3. Load the two tables in the schema with data. Data for the locations table comes from http://download.geonames.org/export/dump/Allcountries.zip. Data for the state table is in ./data/USStates.csv. The sqlldr scripts to load these datasets is in ./src/scripts
+This first script automates launching the ec2 instance. It has configurable parameters to set the instance size, availability zone, etc. It also references the second script, which will configure the machine for OracleXE. The second script will autmoatically execute when the first script launches the instance.
 
-4. To be continued... 
+You'll need your AWS_KEY and your AWS_SECRET_KEY for oracleXEInit.sh. This script also will require an RSA public key on your AWS account.
+
+Also, to get the IP address of the machine once it has booted, use ec-describe-instances with the instance that is returned upon the execution of the first script.
+
+2. Download OracleXE from http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html
+
+Place the .zip file in /u01/download (created by the oracleXEBoot.sh script) as the oracle user.
+
+NOTE: This step cannot be automated, because the user must agree to Oracle's license terms first.
+
+3. Once OracleXE has been loaded onto the machine at /u01/download, execute /u01/git/oracle/scripts/install/XEinstall.sh as root. This will install and start OracleXE.
+
+4. Create an oracle user and schema for the geospatial data, then load the schema....
+
+5. To be continued... 
