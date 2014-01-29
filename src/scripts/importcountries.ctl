@@ -1,4 +1,4 @@
-OPTIONS (SKIP=0,ERRORS = 10)
+OPTIONS (SKIP=0,ERRORS = 100)
 load data
 infile '/u01/download/allCountries.txt'
 APPEND into table locations 
