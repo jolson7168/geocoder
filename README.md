@@ -34,7 +34,7 @@ NOTE: This step cannot be automated, because the user must agree to Oracle's lic
 
 4. Create an oracle user and schema for the geospatial data, then load the schema with needed data (should already be on the machine). Executing script /u01/git/geocoder/src/scripts/loadData.sh as OS user oracle will do all of this for you. 
 
-This step will take 25-30 minutes, as there are 8 million rows of data to be bulk loaded into the (heavily indexed) locations table.
+This step will take several hours, as there are 8 million rows of data to be bulk loaded into the (heavily indexed) locations table.
 
 5. Load the stored procedures...
 
