@@ -48,5 +48,5 @@ update locations set admin1long = 'Virginia' where admin1='VA';
 update locations set admin1long = 'Washington' where admin1='WA';
 update locations set admin1long = 'West Virginia' where admin1='WV';
 update locations set admin1long = 'Wisconsin' where admin1='WI';
-update locations set admin1long = 'Wyoming' where admin1='WY'
+update locations set admin1long = 'Wyoming' where admin1='WY';
 commit;
