@@ -9,6 +9,7 @@ e.g.  calling: https://myservice.com/geocode/chicago
 
 returns: {"location":"chicago","latitude": 41.881944, "longitude":-87.627778}
 
+Please note the code in this repository is designed for a low-cost EC2 geocoder. It is designed for a micro instance. In the event you wish to pay for decent Oracle-level performance, you'll need to tweak the code to use an IOPS level EC2 instance, and tune the Oracle configuration script to set up a seperate tablespace for indexes, optimize RAM usage in the SGA, etc. The scripts and SQL here should provide a good start for that.
 
 Instructions
 ------------
@@ -20,24 +21,27 @@ https://github.com/jolson7168/ec2-scripts/initScripts/oracleXEBoot.sh
 
 This first script automates launching the ec2 instance. It has configurable parameters to set the instance size, availability zone, etc. It also references the second script, which will configure the machine for OracleXE. The second script will autmoatically execute when the first script launches the instance.
 
-You'll need your AWS_KEY and your AWS_SECRET_KEY for oracleXEInit.sh. This script also will require an RSA public key on your AWS account.
+You'll need your AWS_KEY and your AWS_SECRET_KEY for oracleXEInit.sh. This script also will require an RSA public key on your AWS account, and an appropriate AWS security group set up (important ports for this: 22 (ssh), 8080 (Apex), 1521 (Oracle))
 
 Also, to get the IP address of the machine once it has booted, use ec-describe-instances with the instance that is returned upon the execution of the first script.
 
 2. Download OracleXE from http://www.oracle.com/technetwork/database/database-technologies/express-edition/downloads/index.html
 
-Place the .zip file in /u01/download (created by the oracleXEBoot.sh script) as the oracle user.
+Place the .zip file in /u01/download (/u01/download is created by the oracleXEBoot.sh script) as the oracle user.
 
 NOTE: This step cannot be automated, because the user must agree to Oracle's license terms first.
 
-3. Once OracleXE has been loaded onto the machine at /u01/download, execute /u01/git/oracle/scripts/install/XEinstall.sh as root. This will install and start OracleXE.
+3. Once OracleXE has been loaded onto the machine at /u01/download, execute /u01/git/oracle/scripts/install/XEinstall.sh as root. This will install and start OracleXE. It configures the SYS and SYSMAN passwords via the autoconfiguration script at /u01/git/oracle/scripts/install/OracleXESilentInst.iss, so PLEASE change the SYS and SYSMAN passwords when you get a chance.
 
-4. Create an oracle user and schema for the geospatial data, then load the schema with needed data (should already be on the machine). Executing script /u01/git/geocoder/src/scripts/loadData.sh as OS user oracle will do all of this for you. 
+Also, this will create a logfile in /u01/logs/XEsilentinstall.log which you can tail to see progress.
 
-This step will take several hours, as there are 8 million rows of data to be bulk loaded into the (heavily indexed) locations table.
+4. After OracleXE install and starts in step #3, the next step is to install a user and schema, and populate the schema with data. Execute /u01/git/geocoder/src/scripts/loadData.sh as the oracle OS user. This step will take several hours, as 8 million rows will be loaded into the GEO schema. When finished, you'll have a oracle user 'geo' with password 'geo', and the stored procedures to lookup the coordinates for a given set of inputs, a set of stored procedures to convert the Oracle recordset to JSON, and to pass it to the webservice managed by Apex.
 
-5. Load the stored procedures...
+Also, this will create a logfile in /u01/logs/oracleSetup.log which you can tail to see progress.
 
-6. Configure APEX...
 
-7. Test the web service....
+5. Test the web service:
+    http://<EC2 IP ADDRESS>:8080/apex/geo.getcoords?OriginalLocation=Chicago,Illinois&InLocation=Chicago&Admin1=Illinois
+   Should return:
+    {"results":[{"ORIGINALLOCATION":"Chicago,Illinois","LOCATIONNAME":"Chicago","LATITUDE":41.85003,"LONGITUDE":-87.65005,"STATUS":"Found"}]}
+
