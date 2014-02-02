@@ -7,4 +7,5 @@ echo 'grant all privileges to geo;' | sqlplus / as sysdba
 
 echo '@/u01/git/geocoder/src/sql/CreateSchema.sql;' |sqlplus geo/geo
 /u01/git/geocoder/src/scripts/importcountries.sh geo geo
+echo '@/u01/git/geocoder/src/sql/CreateIndexes.sql;' |sqlplus geo/geo
 /u01/git/geocoder/src/scripts/importstates.sh geo geo
