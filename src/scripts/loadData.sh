@@ -34,5 +34,12 @@ echo '@/u01/download/json/addons/json_xml.sql;' |sqlplus geo/geo >> /u01/logs/or
 echo '@/u01/download/json/addons/json_util_pkg.sql;' |sqlplus geo/geo >> /u01/logs/oracleSetup.log
 echo '@/u01/download/json/addons/json_helper.sql;' |sqlplus geo/geo >> /u01/logs/oracleSetup.log
 
+echo "`date` ======INSTALLING STORED PROCS...." >> /u01/logs/oracleSetup.log
+echo '@/u01/git/geocoder/src/sql/StoredProcs.sql;' |sqlplus geo/geo >> /u01/logs/oracleSetup.log
+
+echo "`date` ======INSTALLING APEX CODE...." >> /u01/logs/oracleSetup.log
+echo 'grant execute on geo.getcoords to public;' | sqlplus / as sysdba >> /u01/logs/oracleSetup.log
+echo '@/u01/git/geocoder/src/sql/Apex.sql;' |sqlplus / as sysdba >> /u01/logs/oracleSetup.log
+
 
 echo "`date` ======END Oracle Configuration Log=====" >> /u01/logs/oracleSetup.log
