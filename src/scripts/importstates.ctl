@@ -1,6 +1,6 @@
 OPTIONS (SKIP=1,ERRORS = 0)
 load data
-infile /u01/git/geocoder/data/USStates.csv'
+infile '/u01/git/geocoder/data/USStates.csv'
 APPEND into table STATES
 TRAILING NULLCOLS
 (
