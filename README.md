@@ -32,6 +32,7 @@ Also, to get the IP address of the machine once it has booted, use ec-describe-i
 Place the .zip file in /u01/download (/u01/download is created by the oracleXEBoot.sh script) as the oracle user.
 
 NOTE: This step cannot be automated, because the user must agree to Oracle's license terms first.
+NOTE2: The Oracle licensing issue is also the reason this project can't be shared via a pre-configured, snapshotted AMI.
 
 3. Once OracleXE has been loaded onto the machine at /u01/download, execute /u01/git/oracle/scripts/install/XEinstall.sh as root. This will install and start OracleXE. It configures the SYS and SYSMAN passwords via the autoconfiguration script at /u01/git/oracle/scripts/install/OracleXESilentInst.iss, so PLEASE change the SYS and SYSMAN passwords when you get a chance.
 
